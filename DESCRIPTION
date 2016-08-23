@@ -2,10 +2,17 @@ Package: tmParallel
 Title: Parallel Text Mining Package
 Version: 0.0.0.9000
 Authors@R: person("Michał", "Bartecki", email = "michal.bartecki92@gmail.com", role = c("aut", "cre"))
-Description: Implements functions usable in Text Mining using Parallel computing (ni C++ using RcppParallel)
-Depends: R (>= 3.2.2)
+Description: Implements functions usable in Text Mining using Parallel computing
+    (ni C++ using RcppParallel)
+Depends:
+    R (>= 3.2.2)
 License: GPL-3
 Encoding: UTF-8
-Imports: Rcpp, parallel, RcppParallel
-LinkingTo: BH, Rcpp
+Imports:
+    Rcpp,
+    parallel,
+    RcppParallel
+LinkingTo: BH, Rcpp, RcppParallel
+SystemRequirements: GNU make
 LazyData: true
+RoxygenNote: 5.0.1
