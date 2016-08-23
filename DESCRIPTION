@@ -10,7 +10,6 @@ License: GPL-3
 Encoding: UTF-8
 Imports:
     Rcpp,
-    parallel,
     RcppParallel
 LinkingTo: BH, Rcpp, RcppParallel
 SystemRequirements: GNU make

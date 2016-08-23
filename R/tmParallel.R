@@ -2,6 +2,8 @@
 #'
 #' @rdname tmParallel
 #' @importFrom Rcpp sourceCpp
+#' @importFrom RcppParallel RcppParallelLibs
+#' @useDynLib tmParallel
 
 #' @rdname tmParallel
 #' @export
