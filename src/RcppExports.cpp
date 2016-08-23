@@ -50,3 +50,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// R_Cpp_transition_test
+List R_Cpp_transition_test(const StringVector terms, const int out_vectors_length);
+RcppExport SEXP tmParallel_R_Cpp_transition_test(SEXP termsSEXP, SEXP out_vectors_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const StringVector >::type terms(termsSEXP);
+    Rcpp::traits::input_parameter< const int >::type out_vectors_length(out_vectors_lengthSEXP);
+    __result = Rcpp::wrap(R_Cpp_transition_test(terms, out_vectors_length));
+    return __result;
+END_RCPP
+}

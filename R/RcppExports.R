@@ -13,3 +13,7 @@ Cpp_dtm_parallel_v2 <- function(strings, min_term_freq, max_term_freq, min_word_
     .Call('tmParallel_Cpp_dtm_parallel_v2', PACKAGE = 'tmParallel', strings, min_term_freq, max_term_freq, min_word_length, max_word_length)
 }
 
+R_Cpp_transition_test <- function(terms, out_vectors_length) {
+    .Call('tmParallel_R_Cpp_transition_test', PACKAGE = 'tmParallel', terms, out_vectors_length)
+}
+
