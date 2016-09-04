@@ -5,48 +5,103 @@
 
 using namespace Rcpp;
 
+// Cpp_dtm_original_mem_test
+List Cpp_dtm_original_mem_test(const StringVector strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_original_mem_test(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const StringVector >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_original_mem_test(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    return __result;
+END_RCPP
+}
 // Cpp_dtm_original
-List Cpp_dtm_original(const StringVector strings, const int min_term_freq, const int max_term_freq, const unsigned int min_word_length, const unsigned int max_word_length);
-RcppExport SEXP tmParallel_Cpp_dtm_original(SEXP stringsSEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+List Cpp_dtm_original(const StringVector strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_original(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const StringVector >::type strings(stringsSEXP);
-    Rcpp::traits::input_parameter< const int >::type min_term_freq(min_term_freqSEXP);
-    Rcpp::traits::input_parameter< const int >::type max_term_freq(max_term_freqSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type min_word_length(min_word_lengthSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type max_word_length(max_word_lengthSEXP);
-    __result = Rcpp::wrap(Cpp_dtm_original(strings, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    Rcpp::traits::input_parameter< const StringVector >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_original(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
     return __result;
 END_RCPP
 }
-// Cpp_dtm_parallel_v1
-List Cpp_dtm_parallel_v1(const StringVector strings, const int min_term_freq, const int max_term_freq, const unsigned int min_word_length, const unsigned int max_word_length);
-RcppExport SEXP tmParallel_Cpp_dtm_parallel_v1(SEXP stringsSEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+// Cpp_dtm_parallel_mem_test
+List Cpp_dtm_parallel_mem_test(const StringVector& strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_parallel_mem_test(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const StringVector >::type strings(stringsSEXP);
-    Rcpp::traits::input_parameter< const int >::type min_term_freq(min_term_freqSEXP);
-    Rcpp::traits::input_parameter< const int >::type max_term_freq(max_term_freqSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type min_word_length(min_word_lengthSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type max_word_length(max_word_lengthSEXP);
-    __result = Rcpp::wrap(Cpp_dtm_parallel_v1(strings, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    Rcpp::traits::input_parameter< const StringVector& >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_parallel_mem_test(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
     return __result;
 END_RCPP
 }
-// Cpp_dtm_parallel_v2
-List Cpp_dtm_parallel_v2(const StringVector strings, const int min_term_freq, const int max_term_freq, const unsigned int min_word_length, const unsigned int max_word_length);
-RcppExport SEXP tmParallel_Cpp_dtm_parallel_v2(SEXP stringsSEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+// Cpp_dtm_parallel
+List Cpp_dtm_parallel(const StringVector& strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_parallel(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const StringVector >::type strings(stringsSEXP);
-    Rcpp::traits::input_parameter< const int >::type min_term_freq(min_term_freqSEXP);
-    Rcpp::traits::input_parameter< const int >::type max_term_freq(max_term_freqSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type min_word_length(min_word_lengthSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type max_word_length(max_word_lengthSEXP);
-    __result = Rcpp::wrap(Cpp_dtm_parallel_v2(strings, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    Rcpp::traits::input_parameter< const StringVector& >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_parallel(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    return __result;
+END_RCPP
+}
+// Cpp_dtm_parallel_Lists_mem_test
+List Cpp_dtm_parallel_Lists_mem_test(const StringVector& strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_parallel_Lists_mem_test(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const StringVector& >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_parallel_Lists_mem_test(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    return __result;
+END_RCPP
+}
+// Cpp_dtm_parallel_Lists
+List Cpp_dtm_parallel_Lists(const StringVector& strings_, const int& min_term_freq, const int& max_term_freq, const unsigned int& min_word_length, const unsigned int& max_word_length);
+RcppExport SEXP tmParallel_Cpp_dtm_parallel_Lists(SEXP strings_SEXP, SEXP min_term_freqSEXP, SEXP max_term_freqSEXP, SEXP min_word_lengthSEXP, SEXP max_word_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const StringVector& >::type strings_(strings_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type min_term_freq(min_term_freqSEXP);
+    Rcpp::traits::input_parameter< const int& >::type max_term_freq(max_term_freqSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type min_word_length(min_word_lengthSEXP);
+    Rcpp::traits::input_parameter< const unsigned int& >::type max_word_length(max_word_lengthSEXP);
+    __result = Rcpp::wrap(Cpp_dtm_parallel_Lists(strings_, min_term_freq, max_term_freq, min_word_length, max_word_length));
+    return __result;
+END_RCPP
+}
+// mem_test
+List mem_test();
+RcppExport SEXP tmParallel_mem_test() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    __result = Rcpp::wrap(mem_test());
     return __result;
 END_RCPP
 }
@@ -59,6 +114,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const StringVector >::type terms(termsSEXP);
     Rcpp::traits::input_parameter< const int >::type out_vectors_length(out_vectors_lengthSEXP);
     __result = Rcpp::wrap(R_Cpp_transition_test(terms, out_vectors_length));
+    return __result;
+END_RCPP
+}
+// TfIdfParallel
+std::vector<double> TfIdfParallel(const std::vector<double>& word_, const std::vector<double>& text_, const std::vector<double>& count_, const unsigned int termsCount_, const unsigned int documentCount_, bool normalizeTf, bool IdfPlus1);
+RcppExport SEXP tmParallel_TfIdfParallel(SEXP word_SEXP, SEXP text_SEXP, SEXP count_SEXP, SEXP termsCount_SEXP, SEXP documentCount_SEXP, SEXP normalizeTfSEXP, SEXP IdfPlus1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type word_(word_SEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type text_(text_SEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type count_(count_SEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type termsCount_(termsCount_SEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type documentCount_(documentCount_SEXP);
+    Rcpp::traits::input_parameter< bool >::type normalizeTf(normalizeTfSEXP);
+    Rcpp::traits::input_parameter< bool >::type IdfPlus1(IdfPlus1SEXP);
+    __result = Rcpp::wrap(TfIdfParallel(word_, text_, count_, termsCount_, documentCount_, normalizeTf, IdfPlus1));
     return __result;
 END_RCPP
 }

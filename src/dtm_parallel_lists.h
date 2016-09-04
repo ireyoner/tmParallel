@@ -1,6 +1,12 @@
+#ifndef dtm_parallel_v1
+#define dtm_parallel_v1
+
+#if defined(_MEMORY_DEBUG_)
+#include "memory.h"
+#endif
+
 // [[Rcpp::depends(BH)]]
 // [[Rcpp::depends(RcppParallel)]]
-
 #include <Rcpp.h>
 #include <RcppParallel.h>
 #include <boost/tokenizer.hpp>
@@ -104,7 +110,9 @@ struct DtmParallelMapping : public Worker
           mapping[term].push_back(WordCountInText(textIndex,freq));
         }
       }
-
+#if defined(_MEMORY_DEBUG_)
+      checkMaxCurrentRSS();
+#endif
       // czyszczenie mapy dla przetwarzanego tekstu
       wordsInText.clear();
     }
@@ -129,7 +137,9 @@ struct DtmParallelMapping : public Worker
       }else{
         mapping[stem] = otherMapIterator->second;
       }
-
+#if defined(_MEMORY_DEBUG_)
+      checkMaxCurrentRSS();
+#endif
     }
 
   }
@@ -149,7 +159,9 @@ struct DtmParallelMapping : public Worker
       mappingVector.push_back(WordInTexts( mapIterator->first, wordIndex++, wordInVectorFirstIndex, mapIterator->second));
       wordInVectorFirstIndex += listSize;
     }
-
+#if defined(_MEMORY_DEBUG_)
+    checkMaxCurrentRSS();
+#endif
     sparseMatrixVectorSize = wordInVectorFirstIndex;
     return mappingVector;
   }
@@ -196,37 +208,114 @@ struct DtmParallelVectorsFilling : public Worker
         termCountVector[mappingVector[mapIterator].wordInVectorFirstIndex+indexOffset] = listIterator->wordCount;
         indexOffset++;
       }
+#if defined(_MEMORY_DEBUG_)
+      checkMaxCurrentRSS();
+#endif
       mappingVector[mapIterator].occurrences.clear();
     }
   }
 };
 
+#if defined(_MEMORY_DEBUG_)
 // [[Rcpp::export]]
-List Cpp_dtm_parallel_v1(const StringVector strings,
-                         const int min_term_freq,
-                         const int max_term_freq,
-                         const unsigned int min_word_length,
-                         const unsigned int max_word_length) {
+List Cpp_dtm_parallel_Lists_mem_test(
+    const StringVector & strings_,
+    const int & min_term_freq,
+    const int & max_term_freq,
+    const unsigned int & min_word_length,
+    const unsigned int & max_word_length) {
+#else
+// [[Rcpp::export]]
+List Cpp_dtm_parallel_Lists(
+    const StringVector & strings_,
+    const int & min_term_freq,
+    const int & max_term_freq,
+    const unsigned int & min_word_length,
+    const unsigned int & max_word_length) {
+#endif
+
+  #if defined(_MEMORY_DEBUG_)
+  clearMaxCurrentRSS();
+
+  double funcInitRSS = getMaxCurrentRSS();
+
+  checkMaxCurrentRSS();
+#endif
 
   // declare the InnerProduct instance that takes a pointer to the vector data
-  DtmParallelMapping dtmParallelMapping(strings,min_term_freq,max_term_freq,min_word_length,max_word_length);
+  DtmParallelMapping dtmParallelMapping(strings_,min_term_freq,max_term_freq,min_word_length,max_word_length);
+
+#if defined(_MEMORY_DEBUG_)
+  double preParallelRSS = getCurrentRSS();
+#endif
 
   // call paralleReduce to start the work
-  parallelReduce(0, strings.length(), dtmParallelMapping);
+  parallelReduce(0, strings_.length(), dtmParallelMapping);
+
+#if defined(_MEMORY_DEBUG_)
+  double postParallelRSS = getCurrentRSS(),
+    inParallelRSS = getMaxCurrentRSS();
+#endif
 
   std::vector<WordInTexts> mappingVector = dtmParallelMapping.recalcMapPointers();
+
+#if defined(_MEMORY_DEBUG_)
+  double postMappingVectorRSS = getCurrentRSS(),
+    inMappingVectorRSS = getMaxCurrentRSS();
+#endif
+
 
   // create the worker
   DtmParallelVectorsFilling
     dtmParallelVectorsFilling(mappingVector, dtmParallelMapping.sparseMatrixVectorSize, mappingVector.size());
 
+#if defined(_MEMORY_DEBUG_)
+  double preParallelForRSS = getCurrentRSS();
+#endif
+
   // call it with parallelFor
   parallelFor(0, mappingVector.size(), dtmParallelVectorsFilling);
 
+#if defined(_MEMORY_DEBUG_)
+  double postParallelForRSS = getCurrentRSS(),
+    inParallelForRSS = getMaxCurrentRSS();
+
+  // return the computed product
+  List ret =
+    List::create(
+      Named("vectors") = List::create(
+        Named("i") = dtmParallelVectorsFilling.textIndexVector, // i
+        Named("j") = dtmParallelVectorsFilling.termIndexVector, // j
+        Named("v") = dtmParallelVectorsFilling.termCountVector, // v
+        Named("terms") = dtmParallelVectorsFilling.termsVector
+      ),
+      Named("RSS") = List::create(
+        Named("initialRSS") = funcInitRSS,
+        Named("createRSS") = getMaxCurrentRSS(),
+        Named("preMapReduceRSS") = preParallelRSS,
+        Named("inMapReduceRSS") = inParallelRSS,
+        Named("postMapReduceRSS") = postParallelRSS,
+        Named("inMappingVectorRSS") = inMappingVectorRSS,
+        Named("postMappingVectorRSS") = postMappingVectorRSS,
+        Named("preParallelForRSS") = preParallelForRSS,
+        Named("inParallelForRSS") = inParallelForRSS,
+        Named("postParallelForRSS") = postParallelForRSS,
+        Named("maxCurrentRSS") = getMaxCurrentRSS(),
+        Named("peakRSS") = getPeakRSS()
+      )
+    );
+
+  ((List)ret[1])[10] = getMaxCurrentRSS();
+
+  return ret;
+#else
   // return the computed product
   return List::create(Named("i") = dtmParallelVectorsFilling.textIndexVector, // i
                       Named("j") = dtmParallelVectorsFilling.termIndexVector, // j
                       Named("v") = dtmParallelVectorsFilling.termCountVector, // v
                       Named("terms") = dtmParallelVectorsFilling.termsVector); // terms
+
+#endif
 }
 
+#endif

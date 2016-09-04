@@ -5,12 +5,10 @@ Authors@R: person("Michał", "Bartecki", email = "michal.bartecki92@gmail.com", 
 Description: Implements functions usable in Text Mining using Parallel computing
     (ni C++ using RcppParallel)
 Depends:
-    R (>= 3.2.2)
+    R (>= 3.2.2), NLP (>= 0.1-6.2)
 License: GPL-3
 Encoding: UTF-8
-Imports:
-    Rcpp,
-    RcppParallel
+Imports:  Rcpp, RcppParallel, slam
 LinkingTo: BH, Rcpp, RcppParallel
 SystemRequirements: GNU make
 LazyData: true
