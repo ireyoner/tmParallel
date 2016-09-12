@@ -23,34 +23,55 @@ struct DtmParallel : public Worker
   const int max_term_freq;
   const unsigned int min_word_length;
   const unsigned int max_word_length;
+  const unsigned int vectors_resize_size;
+  const unsigned int vectors_resize_threshold;
+  const unsigned int terms_resize_size;
+  const unsigned int terms_resize_threshold;
 
   // product that I have accumulated
   std::map<std::string, int> terms_pos;
   std::vector<int> textIndexVector, termIndexVector, termCountVector;
   std::vector<std::string> termsVector;
+  int termPos;
 
   // constructors
   DtmParallel( const StringVector & p_texts,
                const int & p_min_term_freq,
                const int & p_max_term_freq,
                const unsigned int & p_min_word_length,
-               const unsigned int & p_max_word_length
+               const unsigned int & p_max_word_length,
+               const unsigned int & p_vectors_resize_size,
+               const unsigned int & p_vectors_resize_threshold,
+               const unsigned int & p_terms_resize_size,
+               const unsigned int & p_terms_resize_threshold
   ) : texts(p_texts),
   min_term_freq(p_min_term_freq),
   max_term_freq(p_max_term_freq),
   min_word_length(p_min_word_length),
-  max_word_length(p_max_word_length) {}
+  max_word_length(p_max_word_length),
+  vectors_resize_size(p_vectors_resize_size),
+  vectors_resize_threshold(p_vectors_resize_threshold),
+  terms_resize_size(p_terms_resize_size),
+  terms_resize_threshold(p_terms_resize_threshold),
+  terms_pos(),
+  termPos(1)  {}
+
   DtmParallel(DtmParallel & dp,
               Split
   ) : texts(dp.texts),
   min_term_freq(dp.min_term_freq),
   max_term_freq(dp.max_term_freq),
   min_word_length(dp.min_word_length),
-  max_word_length(dp.max_word_length) {}
+  max_word_length(dp.max_word_length),
+  vectors_resize_size(dp.vectors_resize_size),
+  vectors_resize_threshold(dp.vectors_resize_threshold),
+  terms_resize_size(dp.terms_resize_size),
+  terms_resize_threshold(dp.terms_resize_threshold),
+  terms_pos(),
+  termPos(1) {}
 
   // process just the elements of the range I've been asked to
   void operator()(std::size_t begin, std::size_t end) {
-    int termPos = 1;
     std::map<std::string, int> text_terms;
 #if defined(_MEMORY_DEBUG_)
     checkMaxCurrentRSS();
@@ -64,9 +85,7 @@ struct DtmParallel : public Worker
            ++it
       ) {
         std::string token = *it;
-        if (min_word_length <= token.length() &&
-            token.length() <= max_word_length)
-          text_terms[token]++;
+        text_terms[token]++;
       }
 
       for (std::map<std::string, int>::iterator it = text_terms.begin();
@@ -75,22 +94,28 @@ struct DtmParallel : public Worker
         std::string term = it->first;
         int freq = it->second;
 
-        if (min_term_freq <= freq && freq <= max_term_freq) {
+        if (min_term_freq <= freq
+            && freq <= max_term_freq
+            && min_word_length <= term.length()
+            && term.length() <= max_word_length) {
+
           if (!terms_pos.count(term)) {
             terms_pos[term] = termPos++;
-            if(termsVector.size() + 1 == termsVector.capacity())
-              termsVector.reserve(termsVector.capacity()+1024);
+
+            if(vectors_resize_threshold <= textIndexVector.size()
+               && termsVector.size() + 1 == termsVector.capacity())
+              termsVector.reserve(termsVector.capacity()+terms_resize_size);
+
             termsVector.push_back(term);
           }
-          if(textIndexVector.size()+1 == textIndexVector.capacity()){
-            textIndexVector.reserve(textIndexVector.capacity()+1024);
-          // }
-          // if(termIndexVector.size()+1 == termIndexVector.capacity()){
-            termIndexVector.reserve(termIndexVector.capacity()+1024);
-          // }
-          // if(termCountVector.size()+1 == termCountVector.capacity()){
-            termCountVector.reserve(termCountVector.capacity()+1024);
+
+          if(vectors_resize_threshold <= textIndexVector.size()
+             && textIndexVector.size() + 1 == textIndexVector.capacity()){
+            textIndexVector.reserve(textIndexVector.capacity()+vectors_resize_size);
+            termIndexVector.reserve(termIndexVector.capacity()+vectors_resize_size);
+            termCountVector.reserve(termCountVector.capacity()+vectors_resize_size);
           }
+
           termIndexVector.push_back(terms_pos[term]);
           textIndexVector.push_back(index + 1);
           termCountVector.push_back(freq);
@@ -106,7 +131,6 @@ struct DtmParallel : public Worker
 
   // join my value with that of another InnerProduct
   void join(const DtmParallel& ut) {
-    int termPos = terms_pos.size() + 1;
     std::map<int,int> utTermsMapping;
 
 #if defined(_MEMORY_DEBUG_)
@@ -154,7 +178,6 @@ struct DtmParallel : public Worker
     ) {
       int termIndex = *termsPosIter;
       termIndexVector.push_back( utTermsMapping[termIndex] );
-      // textIndexVector.push_back( terms_pos[ut.termsVector[termIndex-1]] );
     }
 #if defined(_MEMORY_DEBUG_)
     checkMaxCurrentRSS();
@@ -182,7 +205,12 @@ List Cpp_dtm_parallel_mem_test(
     const int & min_term_freq,
     const int & max_term_freq,
     const unsigned int & min_word_length,
-    const unsigned int & max_word_length) {
+    const unsigned int & max_word_length,
+    const unsigned int & vectors_resize_size,
+    const unsigned int & vectors_resize_threshold,
+    const unsigned int & terms_resize_size,
+    const unsigned int & terms_resize_threshold
+) {
 #else
   // [[Rcpp::export]]
   List Cpp_dtm_parallel(
@@ -190,7 +218,12 @@ List Cpp_dtm_parallel_mem_test(
       const int & min_term_freq,
       const int & max_term_freq,
       const unsigned int & min_word_length,
-      const unsigned int & max_word_length) {
+      const unsigned int & max_word_length,
+      const unsigned int & vectors_resize_size,
+      const unsigned int & vectors_resize_threshold,
+      const unsigned int & terms_resize_size,
+      const unsigned int & terms_resize_threshold
+) {
 #endif
 
 #if defined(_MEMORY_DEBUG_)
@@ -202,7 +235,17 @@ List Cpp_dtm_parallel_mem_test(
 #endif
 
     // declare the InnerProduct instance that takes a pointer to the vector data
-    DtmParallel dtmParallel(strings_,min_term_freq,max_term_freq,min_word_length,max_word_length);
+    DtmParallel dtmParallel(
+        strings_,
+        min_term_freq,
+        max_term_freq,
+        min_word_length,
+        max_word_length,
+        vectors_resize_size,
+        vectors_resize_threshold,
+        terms_resize_size,
+        terms_resize_threshold
+    );
 
 #if defined(_MEMORY_DEBUG_)
     double preParallelRSS = getCurrentRSS();

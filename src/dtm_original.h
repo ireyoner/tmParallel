@@ -19,7 +19,12 @@ List Cpp_dtm_original_mem_test(
     const int & min_term_freq,
     const int & max_term_freq,
     const unsigned int & min_word_length,
-    const unsigned int & max_word_length) {
+    const unsigned int & max_word_length,
+    const unsigned int & vectors_resize_size,
+    const unsigned int & vectors_resize_treshhold,
+    const unsigned int & terms_resize_size,
+    const unsigned int & terms_resize_treshhold
+) {
 #else
 // [[Rcpp::export]]
 List Cpp_dtm_original(
@@ -27,7 +32,12 @@ List Cpp_dtm_original(
     const int & min_term_freq,
     const int & max_term_freq,
     const unsigned int & min_word_length,
-    const unsigned int & max_word_length) {
+    const unsigned int & max_word_length,
+    const unsigned int & vectors_resize_size,
+    const unsigned int & vectors_resize_treshhold,
+    const unsigned int & terms_resize_size,
+    const unsigned int & terms_resize_treshhold
+) {
 #endif
 #if defined(_MEMORY_DEBUG_)
   clearMaxCurrentRSS();

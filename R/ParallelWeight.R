@@ -49,8 +49,10 @@ weightTfIdfParallel <-
 
     if (inherits(m, "DocumentTermMatrix")){
       m$v <- tmParallel::TfIdfParallel(m$j,m$i,m$v,m$ncol,m$nrow,normalize,plus1inIdf)
-    }else{
+    }else if(inherits(m, "TermDocumentMatrix")){
       m$v <- tmParallel::TfIdfParallel(m$i,m$j,m$v,m$nrow,m$ncol,normalize,plus1inIdf)
+    }else{
+      stop("Object must inherit either 'DocumentTermMatrix' or 'TermDocumentMatrix'")
     }
     attr(m, "weighting") <- c(sprintf("%s%s",
                                       "term frequency - inverse document frequency",
